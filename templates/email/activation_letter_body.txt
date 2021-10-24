@@ -1,0 +1,8 @@
+Здравствуйте {{ user.username }}!
+
+Вы зарегистрировались на сайте DjangoGramm.
+Для продолжения регистрации пройдите по ссылке ниже:
+
+{{ host }}{% url 'DjangoGramm:register_activate' sign=sign %}
+
+С уважением, администрация DjangoGramm.

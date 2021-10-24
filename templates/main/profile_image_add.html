@@ -1,0 +1,19 @@
+{% extends "layout/basic.html" %}
+
+
+{% load bootstrap5 %}
+
+
+{% block title %}Добавление фотографии - Профиль пользователя{% endblock %}
+
+{% block content %}
+    <h2 class="text-center">Добавление фотографии</h2>
+    <div class="w-50" style="margin-left: auto;
+    margin-right: auto">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form layout='horizontal' %}
+            {% buttons submit='Добавить' %}{% endbuttons %}
+        </form>
+    </div>
+{% endblock %}

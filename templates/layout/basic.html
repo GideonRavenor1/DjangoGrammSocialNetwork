@@ -1,0 +1,120 @@
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="{% static 'main/favicon.ico' %}" />
+    <title>{% block title %}Главная{% endblock %} - DjangoGramm</title>
+
+    <link rel="stylesheet" type="text/css"
+    href="{% static 'main/style.css' %}">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+</head>
+
+<body class="container-fluid">
+    <header>
+        <h1>DjangoGramm</h1>
+    </header>
+    <div class="nav justify-content-end border">
+        {% if user.is_authenticated %}
+            <button class="btn btn-success" style="margin-right: 10px;">
+                <a style="text-decoration: none; color: white" href="{% url 'DjangoGramm:index' %}">Главная</a>
+            </button>
+            <div class="dropdown" style="margin-right: 10px;">
+                <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Категории
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+                    {% for rubric in rubrics %}
+                        {% ifchanged rubric.super_rubric.pk %}
+                            <li><span class="dropdown-item" style="color:red; font-size: 20px">{{ rubric.super_rubric.name }}</span></li>
+                            <li><hr></li>
+                        {% endifchanged %}
+                        <li><a class="dropdown-item"
+                               href="{% url 'Rubric:by_rubric' rubric_id=rubric.pk %}">{{ rubric.name }}</a></li>
+                        <li><hr></li>
+                    {% endfor %}
+                    <li><hr></li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:other' page='about' %}">О сайте</a></li>
+                </ul>
+            </div>
+            <div class="dropdown" style="margin-right: 10px">
+                <button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ user.username }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'DjangoGramm:profile_change' %}">
+                            {% if user.avatar %}
+                                <img class="rounded" src="{{ user.avatar.url }}" height="50" alt="image"/>
+                            {% else %}
+                                <img class="rounded" src="{% static 'image/def_ava.jpg' %}" height="50" alt="image"/>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown" style="margin-right: 10px">
+                <button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButton2"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Пользователи
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                    <li>
+                        {% for usr in users %}
+                            <a class="dropdown-item"
+                               href="{% url 'DjangoGramm:by_user' pk=usr.pk %}">{{ usr.username }}</a>
+                        {% endfor %}
+                    </li>
+
+                </ul>
+            </div>
+            <div class="btn-group dropstart">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Профиль
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:by_user' pk=user.pk %}">Моя
+                        страница</a></li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:profile' %}">Мои фотографии</a></li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:profile_change' %}">Изменить личные
+                        данные</a></li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:password_change' %}">Изменить пароль</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:logout' %}">Выйти</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'DjangoGramm:profile_delete' %}">Удалить</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <button class="btn btn-primary" style="margin-right: 10px"><a
+                    href="{% url 'DjangoGramm:login' %}" style="color: white; text-decoration: none;">Вход</a>
+            </button>
+            <div class="btn btn-primary">
+                <a href="{% url 'DjangoGramm:register' %}" style="color: white;text-decoration: none">Регистрация</a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <section class=" col border py-2">
+            {% bootstrap_messages %}
+            {% block content %}
+            {% endblock %}
+        </section>
+    </div>
+    </body>
+</html>

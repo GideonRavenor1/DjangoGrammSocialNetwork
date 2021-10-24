@@ -1,0 +1,81 @@
+{% extends 'layout/basic.html' %}
+
+{% block title %}Категории{% endblock %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <div class="btn-group" role="group" style="margin-bottom: 45px">
+        <button type="button" class="btn btn-secondary" style="margin-right: 10px">
+            <a class="btn btn-secondary" href="{% url 'FollowingsLikes:followers_images' %}">Моя лента</a>
+        </button>
+        <button type="button" class="btn btn-secondary">
+            <a class="btn btn-secondary" href="{% url 'FollowingsLikes:list_followers' %}">Мои подписчики</a>
+        </button>
+    </div>
+    {% if images %}
+        <div id="carouselExampleCaptions" class="carousel slide w-75" data-bs-ride="carousel" style="margin-left: auto;
+    margin-right: auto">
+            <div class="carousel-indicators">
+                {% for image in images %}
+                    <button type="button" data-bs-target="#carouselExampleCaptions"
+                            data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.counter == 1 %}class="active"
+                            aria-current="true"{% endif %} aria-label="{{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner" style="border-radius: 25px; border: 10px solid #a1d4e5;">
+                {% for image in images %}
+                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                        <a href="{{ image.get_absolute_url }}"><img src="{{ image.image.url }}" class="d-block w-100" alt="photo-{{ image.pk }}"></a>
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>{{ image.rubric }}</h5>
+                            <p>
+                                {% if image.user.avatar %}
+                                    <img class="rounded-circle mt-2" src="{{ image.user.avatar.url }}"
+                                         width="50" height="40" alt="image"/>
+                                {% else %}
+                                    <img class="rounded-circle mt-2" src="{% static 'image/def_ava.jpg' %}"
+                                         width="50" height="40" alt="image"/>
+                                {% endif %}
+                                    <a href="{% url 'DjangoGramm:by_user' pk=image.user.pk %}" style="color: #b3c7e1; text-decoration: none; font-size: 20px">{{ image.user.username }}
+                                    </a> - {{ image.rubric }}
+                            </p>
+                            <form action="{% url 'FollowingsLikes:count-likes' pk=image.pk %}" class="like-form"
+                                  id="{{ image.pk }}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="image_pk" value={{ image.pk }}>
+                                <button type="submit" class="btn btn-danger like-btn{{ image.pk }}">
+
+                                    {% if image.pk not in likes %}
+                                        {% bs_icon 'heart-fill' %} {{ image.count }}
+                                    {% else %}
+                                        {% bs_icon 'heart' %} {{ image.count }}
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    {% else %}
+    <h4 class="text-center">Тут пока нет ни одной фотографии...</h4>
+    {% endif %}
+
+    <script src="{% static 'main/likes.js' %}"></script>
+
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap_icons %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h2>Страница не найдена</h2>
+        <p><a href="{% url 'DjangoGramm:index' %}">{% bs_icon 'house-door' size='3.0em' %}</a></p>
+        <p>Все права пренадлежат сообществу &laquo;Django 3&raquo;.</p>
+    </div>
+{% endblock %}

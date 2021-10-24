@@ -1,0 +1,69 @@
+{% extends "layout/basic.html" %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+
+    <div class="card text-center w-75" style="margin-left: auto;
+    margin-right: auto">
+        <h2>Профиль пользователя {{ userGramm.username }}</h2>
+        <div class="text-center">
+            {% if userGramm.avatar %}
+                <img class="rounded" src="{{ userGramm.avatar.url }}" width="200" height="180" alt="image"/>
+            {% else %}
+                <img class="rounded" src="{% static 'image/def_ava.jpg' %}" width="200" height="180" alt="image"/>
+            {% endif %}
+
+            {% if userGramm.pk == user.pk %}
+                <p class="mt-4"> Это ваша страница </p>
+            {% else %}
+                <form action="{% url 'FollowingsLikes:followings' pk=userGramm.pk %}" class="following-form"
+                      id="{{ userGramm.pk }}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_pk" value={{ userGramm.pk }}>
+                    <button type="submit" class="btn btn-info mt-4 following-btn{{ userGramm.pk }}">
+
+                        {% if get_follower %}
+                            {% bs_icon 'lightbulb' size='2.0em' %} Вы подписаны
+                        {% else %}
+                            {% bs_icon 'lightbulb-fill' size='2.0em' %} Подписаться
+                        {% endif %}
+
+                    </button>
+
+                </form>
+
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Логин: {{ userGramm.username }}</h5>
+            <p class="card-text">О себе: <br> {{ userGramm.bio }}.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Имя: {{ userGramm.first_name }} </li>
+            <li class="list-group-item">Фамилия: {{ userGramm.last_name }}</li>
+            <li class="list-group-item">Пол: {{ userGramm.gender }}</li>
+            <li class="list-group-item">День рождения: {{ userGramm.birthday }}</li>
+            <li class="list-group-item">Номер телефон: {{ userGramm.phone }}</li>
+        </ul>
+        <div class="card-body">
+            <div class="followers">
+                {% if userGramm.count_followers == 0 %}
+                    <p class="mt-4">Подписчиков нет: {% bs_icon 'person-dash' size='2.0em' %}</p>
+                {% else %}
+                    <p>Количество подписчиков: <a href="{% url 'FollowingsLikes:list_followers' %}">
+                        <button type="submit" class="btn btn-success" name="like">
+                            {% bs_icon 'person-check-fill' size='2.0em' %} {{ userGramm.count_followers }}
+                        </button>
+                    </a>
+                    </p>
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+    <script src="{% static 'main/user_followers.js' %}"></script>
+{% endblock %}

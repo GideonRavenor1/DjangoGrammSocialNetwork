@@ -1,0 +1,54 @@
+{% extends 'layout/basic.html' %}
+
+{% load static %}
+
+{% load bootstrap5 %}
+
+{% load bootstrap_icons %}
+
+{% block title %}Подписчики пользователя{% endblock %}
+
+{% block content %}
+    <div style="left: 30%; right: 30%; position: relative">
+    <h2>Подписчики пользователя
+        {% if user.avatar %}
+            <img class="rounded-circle" src="{{ user.avatar.url }}" width="60" height="50" alt="image"/>
+        {% else %}
+            <img class="rounded-circle" src="{% static 'image/def_ava.jpg' %}" width="60" height="50" alt="image"/>
+        {% endif %} <a href="{% url 'DjangoGramm:by_user' pk=user.pk %}"
+                       style="color: #b3c7e1; text-decoration: none; font-size: 40px">{{ user.username }}</a>
+    </h2>
+    <div class="fwr_users">
+        {% for follower in followers_users %}
+            {% if forloop.last %}
+                <div class="text-left last_follower" data-follower_pk="{{ follower.user_id.pk }}"
+                     data-url_root="{% url 'FollowingsLikes:load-more-followers' %}">
+            {% else %}
+                <div class="text-left">
+            {% endif %}
+        <p>
+            {% if follower.user_id.avatar %}
+                <img class="rounded-circle ml-1" src="{{ follower.user_id.avatar.url }}" width="50" height="40"
+                     alt="image"/>
+            {% else %}
+                <img class="rounded-circle ml-1" src="{% static 'image/def_ava.jpg' %}" width="50" height="40"
+                     alt="image"/>
+            {% endif %}
+            <a href="{% url 'DjangoGramm:by_user' pk=follower.user_id.pk %}"
+               style="color: #b3c7e1; text-decoration: none; font-size: 20px">{{ follower.user_id }}</a>
+        </p>
+        </div>
+        {% endfor %}
+        </div>
+
+        {% if followers_users|length >= 2 %}
+            <p class="text-left ml-1">
+                <button class="btn load_more_user" id="load_more_user">
+                    {% bs_icon 'caret-down-square' size='1.5em' %}</button>
+            </p>
+        {% endif %}
+    </div>
+    <script src="{% static 'main/my_followers.js' %}">
+    </script>
+{% endblock %}
+

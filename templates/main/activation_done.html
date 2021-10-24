@@ -1,0 +1,15 @@
+{% extends "layout/../layout/basic.html" %}
+
+{% block title %}Активация выполнена{% endblock %}
+
+{% block content %}
+    <div class="card text-center">
+        <div class="card-header">
+            Активация
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Активация прошла успешно!</h5>
+            <a href="{% url 'DjangoGramm:login' %}" class="btn btn-primary">Войти на сайт</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout/../layout/basic.html" %}
+
+{% block title %}Ошибка при активации{% endblock %}
+
+{% block content %}
+    <div class="card text-center">
+        <div class="card-header">
+            Активация
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Неудачная попытка акцивации.</h5>
+            <a href="{% url 'DjangoGramm:register' %}" class="btn btn-primary">Повторная регистрация</a>
+        </div>
+    </div>
+{% endblock %}

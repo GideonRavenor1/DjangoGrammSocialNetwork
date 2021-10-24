@@ -1,0 +1,75 @@
+{% extends "layout/basic.html" %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+
+{% block title %}Комментарии{% endblock %}
+
+{% block content %}
+
+    <div class="display-7 text-center">
+        <img class="rounded" src="{{ image.image.url }}" width="60%" alt="image"/>
+        <p>
+        <p>
+            {% if image.user.avatar %}
+                <img class="rounded-circle" src="{{ image.user.avatar.url }}" width="80" height="70" alt="image"/>
+            {% else %}
+                <img class="rounded-circle" src="{% static 'image/def_ava.jpg' %}" width="80" height="70" alt="image"/>
+            {% endif %}
+            <a style="text-decoration: none" href="{% url 'DjangoGramm:by_user' pk=image.user.pk %}">{{ image.user }}</a> - {{ image.rubric }}
+        </p>
+        <form action="{% url 'FollowingsLikes:count-likes' pk=image.pk %}" class="like-form"
+              id="{{ image.pk }}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="image_pk" value={{ image.pk }}>
+            <button type="submit" class="btn btn-danger like-btn{{ image.pk }}">
+                {% if like == False %}
+                    {% bs_icon 'heart-fill' %} {{ count_likes }}
+                {% else %}
+                    {% bs_icon 'heart' %} {{ count_likes }}
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    <h4 class="text-center">Комментарии</h4>
+    <div class="card w-75" style="margin-left: auto;
+    margin-right: auto; margin-bottom: 10px">
+        <div class="card-body">
+            {% if comments %}
+                <div class="mt-5">
+                    {% for comment in comments %}
+
+                            {% if comment.user.avatar %}
+
+                                <img class="rounded-circle text-center" src="{{ comment.user.avatar.url }}" width="60" height="50"
+                                     alt="image"/>
+                            {% else %}
+                                <img class="rounded-circle text-center" src="{% static 'image/def_ava.jpg' %}" width="60"
+                                     height="50" alt="image"/>
+                            {% endif %}
+                            <a style="text-decoration: none" href="{% url 'DjangoGramm:by_user' pk=comment.user.pk %}">{{ comment.user }}</a>
+                            <p class="text-center">{{ comment.content }}</p>
+                            <hr>
+                            <p class="font-italic">{{ comment.created_at }}</p>
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="w-75" style="margin-left: auto;
+    margin-right: auto">
+        <form action="{% url 'Comments:comment_page' pk=image.pk %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form layout='horizontal' %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            {% endbuttons %}
+        </form>
+        <script src="{% static 'main/likes.js' %}">
+
+        </script>
+
+    </div>
+{% endblock %}

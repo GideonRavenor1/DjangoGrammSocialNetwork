@@ -1,0 +1,15 @@
+{% extends "layout/../layout/basic.html" %}
+
+{% block title %}Пользователь уже зарегистрирован!{% endblock %}
+
+{% block content %}
+    <div class="card text-center">
+        <div class="card-header">
+            Активация
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Пользователь с таким именем был активирован ранее.</h5>
+            <a href="{% url 'DjangoGramm:login' %}" class="btn btn-primary">Войти на сайт</a>
+        </div>
+    </div>
+{% endblock %}

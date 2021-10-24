@@ -1,0 +1,7 @@
+/venv/
+/config/image/media/
+/config/config/.env
+/config/htmlcov
+.coverage
+.idea
+/staticfiles/

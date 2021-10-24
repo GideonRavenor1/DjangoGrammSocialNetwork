@@ -1,0 +1,44 @@
+{%  extends "layout/../layout/basic.html" %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+
+{%  block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="card text-center" style="position: absolute;top: 28%;left: 25%;background: #f0f0f0; width: 50%">
+  <div class="card-header">
+    Вход
+  </div>
+  <div class="card-body">
+      {% if user.is_authenticated %}
+          <h5 class="card-title">Вход выполнен</h5>
+
+      {% else %}
+
+          <form method="post">
+              {% csrf_token %}
+              {% bootstrap_form form layout='horizontal' %}
+              <input type="hidden" name="next" value="{{ next }}">
+              {% buttons submit='Войти' %}{% endbuttons %}
+          </form>
+          <button class="btn btn-danger"><a href="{% url 'reset_password' %}"
+                                            style="text-decoration: none; color: white">Забыли пароль?</a>
+          </button>
+          </div>
+          <div class="card-footer text-muted">
+              <p class="mt-2">Войти с помощью:</p>
+
+
+              <a href="{% url "social:begin" "github" %}">{% bs_icon 'github' size='4.0em' %}</a>
+
+
+              <a href="{% url "social:begin" "vk-oauth2" %}"><img class="rounded vk"
+                                                                  src="{% static 'main/vk.png' %}"/></a>
+
+          </div>
+      {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout/../layout/basic.html" %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+    <div style="left: 30%; right: 30%; position: relative">
+    <h2>Профиль пользователя {{ user.username }}</h2>
+    {% if user.first_name and user.last_name %}
+        <p>Здравствуйте, {{ user.first_name }} {{ user.last_name }}!</p>
+    {% else %}
+        <p>Здравствуйте</p>
+    {% endif %}
+    <div>
+        <button class="btn btn-success"><a class="nav-link"
+                                href="{% url 'DjangoGramm:profile_image_add' %}" style="color: white">Добавить фотографии</a></button></div>
+    <h3>Ваши фотографии</h3>
+    <div class="user_images">
+        {% for img in images %}
+            {% if forloop.last %}
+                <div class="text-left last_user_image" data-image_pk="{{ img.pk }}"
+                     data-url_root="{% url 'DjangoGramm:load-more-user-images' %}">
+            {% else %}
+                <div class="text-left">
+            {% endif %}
+        <p><img class="rounded" src="{{ img.image.url }}" style="width: 40%" alt="image"/>
+        <p><a href="{% url 'DjangoGramm:profile_image_delete' pk=img.pk %}">{% bs_icon 'trash-fill' size='1.7em' %}
+        </a></p></p>
+        <p>{{ img.rubric }}</p>
+        </div>
+        {% endfor %}
+
+        </div>
+        {% if images.count >= 2 %}
+            <p class="text-left"><button class="btn btn-primary load_user_image" id="load_user_image">
+                {% bs_icon 'chevron-double-down' size='1.7em' %}</button></p>
+        {% endif %}
+    </div>
+        <script src="{% static 'main/my_images.js' %}">
+        </script>
+{% endblock %}

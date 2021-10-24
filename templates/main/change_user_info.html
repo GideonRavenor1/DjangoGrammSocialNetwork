@@ -1,0 +1,27 @@
+{%  extends "layout/../layout/basic.html" %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+
+{% block title %}Правка личных данных{% endblock %}
+
+{% block content %}
+    <div class="text-center" style="margin-bottom: 20px">
+    <h2>Правка личных данных пользователя {{ user.username }}</h2>
+    {% if user.avatar %}
+        <img class="rounded" src="{{ user.avatar.url }}" width="200" height="180"/>
+    {% else %}
+        <img class="rounded" src="{% static 'image/def_ava.jpg' %}" width="200" height="180"/>
+    {% endif %}
+    </div>
+    <div class="text-center w-50" style="margin-left: auto;
+    margin-right: auto">
+        <form method="post" class="form-control" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form layout='harizontal' %}
+            {% buttons submit='Сохранить' %}{% endbuttons %}
+        </form>
+    </div>
+
+{% endblock %}
