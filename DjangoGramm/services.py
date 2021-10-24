@@ -31,7 +31,7 @@ def get_images_rubric_filter(args):
 
 
 def get_images_profile_filter(args):
-    return Image.objects.filter(user=args.user.pk).select_related("rubric").select_related("rubric__super_rubric")
+    return Image.objects.filter(user=args.user.pk).select_related("rubric").select_related("rubric__super_rubric")[:2]
 
 
 def get_current_rubric(args):
@@ -53,12 +53,15 @@ def get_followers_count(args):
 
 
 def get_image(args):
-    image = get_object_or_404(Image, pk=args)
-    return image
+    image = Image.objects.filter(pk=args).select_related("user", "rubric").prefetch_related("rubric__super_rubric", "likes")\
+        .only("image", "pk", "rubric__id", "rubric__name", "rubric__super_rubric", "user__avatar", "user__id", "user__username")\
+        .annotate(count=Count("likes"))
+    return image[0]
 
 
 def get_comment(args):
-    return Comment.objects.filter(image=args, is_active=True)
+    return Comment.objects.filter(image=args, is_active=True).select_related("user").\
+        only("user__username", "user__avatar", "user__id", "content", "created_at")
 
 
 def check_is_user_activate(username):
@@ -98,5 +101,6 @@ def get_data_by_user_image(request):
 
 
 def get_more_user_images(args, request):
-    return Image.objects.filter(pk__lt=int(args), user=request.user.pk)[:2]
+    return Image.objects.filter(pk__lt=int(args), user=request.user.pk).\
+               select_related("rubric").prefetch_related("rubric__super_rubric")[:2]
 

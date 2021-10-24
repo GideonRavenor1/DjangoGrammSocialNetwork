@@ -1,4 +1,3 @@
-from django.db.models import FilteredRelation, Q, F
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
