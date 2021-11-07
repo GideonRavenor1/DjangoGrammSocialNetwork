@@ -148,8 +148,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
 
 class DynamicUserImageLoad(LoginRequiredMixin, View):
 
-    @staticmethod
-    def get(request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         data = get_data_by_user_image(request)
         return JsonResponse({'data': data})
 
