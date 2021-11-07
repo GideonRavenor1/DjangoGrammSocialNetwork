@@ -31,16 +31,14 @@ class FollowersImagesListView(LoginRequiredMixin, ListView):
 
 class DynamicFollowingsLoad(LoginRequiredMixin, View):
 
-    @staticmethod
-    def get(request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         data = get_data_by_followers(request)
         return JsonResponse({'data': data})
 
 
 class DynamicFollowings(LoginRequiredMixin, View):
 
-    @staticmethod
-    def post(request, pk, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         following = get_or_create_follower(request, pk)
         if following[1]:
             following[0].save()
@@ -56,8 +54,7 @@ class DynamicFollowings(LoginRequiredMixin, View):
 
 class DynamicLikes(LoginRequiredMixin, View):
 
-    @staticmethod
-    def post(request, pk, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         like = get_or_create_like(request, pk)
         if like[1]:
             like[0].save()
