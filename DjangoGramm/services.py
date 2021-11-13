@@ -31,7 +31,7 @@ def get_images_rubric_filter(args):
 
 
 def get_images_profile_filter(args):
-    return Image.objects.filter(user=args.user.pk).select_related("rubric").select_related("rubric__super_rubric")[:2]
+    return Image.objects.filter(user=args.user.pk).select_related("rubric").prefetch_related("rubric__super_rubric")[:2]
 
 
 def get_current_rubric(args):
